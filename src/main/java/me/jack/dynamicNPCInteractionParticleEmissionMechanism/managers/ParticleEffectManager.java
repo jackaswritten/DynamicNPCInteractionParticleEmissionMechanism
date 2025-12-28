@@ -162,10 +162,14 @@ public class ParticleEffectManager {
                     double x = Math.cos(theta) * radiusAtY;
                     double z = Math.sin(theta) * radiusAtY;
 
+                    // Calculate Y position: center sphere at height/2, scale by height/2
+                    double baseY = center.getY() + npcData.getHeight() / 2;
+                    double scaledY = y * npcData.getHeight() / 2;
+                    
                     Location loc = new Location(
                             center.getWorld(),
                             center.getX() + x * npcData.getRadius(),
-                            center.getY() + npcData.getHeight() / 2 + y * npcData.getHeight() / 2,
+                            baseY + scaledY,
                             center.getZ() + z * npcData.getRadius()
                     );
                     spawnParticleWithData(loc, npcData, viewer);
@@ -388,7 +392,10 @@ public class ParticleEffectManager {
                     double z = expandingRadius * Math.cos(phi);
                     
                     // Scale Y to height range while X and Z use radius
-                    double heightScale = npcData.getHeight() / (2 * npcData.getRadius());
+                    // Guard against division by zero
+                    double heightScale = npcData.getRadius() > 0 
+                        ? npcData.getHeight() / (2 * npcData.getRadius())
+                        : 1.0;
                     double yOffset = npcData.getHeight() / 2 + y * heightScale;
 
                     Location loc = new Location(
