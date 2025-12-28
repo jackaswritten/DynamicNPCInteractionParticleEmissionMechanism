@@ -3,3 +3,35 @@ version: '1.0'
 main: me.jack.dynamicNPCInteractionParticleEmissionMechanism.DynamicNPCInteractionParticleEmissionMechanism
 api-version: '1.21'
 authors: [ Jack(Meedo) ]
+
+commands:
+  dnipem:
+    description: Dynamic NPC Interaction Particle Emission Mechanism commands
+    usage: /dnipem <add|remove|list|reload|info>
+    aliases: [dynamicnpcinteractionparticleemissionmechanism]
+
+permissions:
+  dnipem.add:
+    description: Add an NPC to the system
+    default: op
+  dnipem.remove:
+    description: Remove an NPC from the system
+    default: op
+  dnipem.list:
+    description: List all NPCs
+    default: op
+  dnipem.reload:
+    description: Reload configuration
+    default: op
+  dnipem.info:
+    description: View NPC information
+    default: op
+  dnipem.admin:
+    description: All DNIPEM permissions
+    default: op
+    children:
+      dnipem.add: true
+      dnipem.remove: true
+      dnipem.list: true
+      dnipem.reload: true
+      dnipem.info: true

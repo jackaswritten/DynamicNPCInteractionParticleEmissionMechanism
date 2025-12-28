@@ -1,0 +1,40 @@
+# Database configuration
+database:
+  type: SQLITE  # SQLITE or MYSQL
+  mysql:
+    host: localhost
+    port: 3306
+    database: minecraft
+    username: root
+    password: password
+    useSSL: false
+    
+# Default particle settings (used when adding new NPCs)
+default-settings:
+  particle-type: FLAME  # Any Bukkit Particle type
+  shape: CIRCLE
+  target-mode: FULL_NPC  # CLICK_POINT or FULL_NPC
+  density: 30  # Number of particles
+  speed: 0.1
+  duration: 60  # Ticks (3 seconds)
+  radius: 2.0
+  height: 2.0
+  rotations: 2
+  animation-speed: 1.0
+
+# Messages
+messages:
+  npc-added: "&aSuccessfully registered NPC with particle effects!"
+  npc-removed: "&cNPC removed from system."
+  no-npc-found: "&cNo NPC found in your crosshair."
+  reload-complete: "&aConfiguration reloaded!"
+  npc-list-header: "&e=== Registered NPCs ==="
+  npc-list-entry: "&7- &f{uuid} &7at &f{world} &7({x}, {y}, {z})"
+  npc-info-header: "&e=== NPC Information ==="
+  npc-info-uuid: "&7UUID: &f{uuid}"
+  npc-info-location: "&7Location: &f{world} ({x}, {y}, {z})"
+  npc-info-particle: "&7Particle: &f{particle}"
+  npc-info-shape: "&7Shape: &f{shape}"
+  npc-info-mode: "&7Mode: &f{mode}"
+  no-permission: "&cYou do not have permission to use this command."
+  database-error: "&cDatabase error occurred. Check console for details."
