@@ -162,7 +162,8 @@ public class ParticleEffectManager {
                     double x = Math.cos(theta) * radiusAtY;
                     double z = Math.sin(theta) * radiusAtY;
 
-                    // Calculate Y position: center sphere at height/2, scale by height/2
+                    // Calculate Y position: position sphere center at height/2 above original center
+                    // Then scale the normalized Y coordinate (-1 to 1) by height/2
                     double baseY = center.getY() + npcData.getHeight() / 2;
                     double scaledY = y * npcData.getHeight() / 2;
                     
@@ -392,7 +393,7 @@ public class ParticleEffectManager {
                     double z = expandingRadius * Math.cos(phi);
                     
                     // Scale Y to height range while X and Z use radius
-                    // Guard against division by zero
+                    // When radius is 0, keep Y scaling at 1.0 (vertical line effect)
                     double heightScale = npcData.getRadius() > 0 
                         ? npcData.getHeight() / (2 * npcData.getRadius())
                         : 1.0;
