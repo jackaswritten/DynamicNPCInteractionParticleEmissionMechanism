@@ -89,7 +89,11 @@ public class DNIPEMCommand implements CommandExecutor, TabCompleter {
                 configManager.getDefaultRadius(),
                 configManager.getDefaultHeight(),
                 configManager.getDefaultRotations(),
-                configManager.getDefaultAnimationSpeed()
+                configManager.getDefaultAnimationSpeed(),
+                configManager.getDefaultBlockState(),
+                configManager.getDefaultDustColor(),
+                configManager.getDefaultDustSize(),
+                configManager.getDefaultParticleData()
         );
 
         npcManager.registerNPC(npcData).thenRun(() -> {

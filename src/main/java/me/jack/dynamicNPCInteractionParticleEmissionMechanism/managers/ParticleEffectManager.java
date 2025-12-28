@@ -3,9 +3,14 @@ package me.jack.dynamicNPCInteractionParticleEmissionMechanism.managers;
 import me.jack.dynamicNPCInteractionParticleEmissionMechanism.models.NPCData;
 import me.jack.dynamicNPCInteractionParticleEmissionMechanism.models.ParticleShape;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.Map;
 
 public class ParticleEffectManager {
     private final JavaPlugin plugin;
@@ -54,6 +59,9 @@ public class ParticleEffectManager {
             case POINT:
                 spawnPoint(npcData, targetLocation);
                 break;
+            case MESS:
+                spawnMess(npcData, targetLocation);
+                break;
             default:
                 spawnCircle(npcData, targetLocation);
                 break;
@@ -81,7 +89,7 @@ public class ParticleEffectManager {
                     double y = center.getY() + 1;
 
                     Location loc = new Location(center.getWorld(), x, y, z);
-                    center.getWorld().spawnParticle(npcData.getParticleType(), loc, 1, 0, 0, 0, npcData.getSpeed());
+                    spawnParticleWithData(loc, npcData);
                 }
 
                 ticks++;
@@ -159,7 +167,7 @@ public class ParticleEffectManager {
                             center.getY() + 1 + y * npcData.getRadius(),
                             center.getZ() + z * npcData.getRadius()
                     );
-                    center.getWorld().spawnParticle(npcData.getParticleType(), loc, 1, 0, 0, 0, npcData.getSpeed());
+                    spawnParticleWithData(loc, npcData);
                 }
 
                 ticks++;
@@ -189,7 +197,7 @@ public class ParticleEffectManager {
                     double y = center.getY() + i * heightStep;
 
                     Location loc = new Location(center.getWorld(), x, y, z);
-                    center.getWorld().spawnParticle(npcData.getParticleType(), loc, 1, 0, 0, 0, npcData.getSpeed());
+                    spawnParticleWithData(loc, npcData);
                 }
 
                 ticks++;
@@ -219,13 +227,13 @@ public class ParticleEffectManager {
                     double x1 = center.getX() + npcData.getRadius() * Math.cos(angle);
                     double z1 = center.getZ() + npcData.getRadius() * Math.sin(angle);
                     Location loc1 = new Location(center.getWorld(), x1, y, z1);
-                    center.getWorld().spawnParticle(npcData.getParticleType(), loc1, 1, 0, 0, 0, npcData.getSpeed());
+                    spawnParticleWithData(loc1, npcData);
 
                     // Second helix (offset by 180 degrees)
                     double x2 = center.getX() + npcData.getRadius() * Math.cos(angle + Math.PI);
                     double z2 = center.getZ() + npcData.getRadius() * Math.sin(angle + Math.PI);
                     Location loc2 = new Location(center.getWorld(), x2, y, z2);
-                    center.getWorld().spawnParticle(npcData.getParticleType(), loc2, 1, 0, 0, 0, npcData.getSpeed());
+                    spawnParticleWithData(loc2, npcData);
                 }
 
                 ticks++;
@@ -254,7 +262,7 @@ public class ParticleEffectManager {
                     double z = center.getZ();
 
                     Location loc = new Location(center.getWorld(), x, y, z);
-                    center.getWorld().spawnParticle(npcData.getParticleType(), loc, 1, 0, 0, 0, npcData.getSpeed());
+                    spawnParticleWithData(loc, npcData);
                 }
 
                 ticks++;
@@ -289,7 +297,7 @@ public class ParticleEffectManager {
                             center.getY() + 1 + y * scale,
                             center.getZ()
                     );
-                    center.getWorld().spawnParticle(npcData.getParticleType(), loc, 1, 0, 0, 0, npcData.getSpeed());
+                    spawnParticleWithData(loc, npcData);
                 }
 
                 ticks++;
@@ -317,7 +325,7 @@ public class ParticleEffectManager {
                     double z = center.getZ() + npcData.getRadius() * Math.sin(angle);
 
                     Location loc = new Location(center.getWorld(), x, y, z);
-                    center.getWorld().spawnParticle(npcData.getParticleType(), loc, 1, 0, 0, 0, npcData.getSpeed());
+                    spawnParticleWithData(loc, npcData);
                 }
 
                 ticks++;
@@ -347,7 +355,7 @@ public class ParticleEffectManager {
                     double y = center.getY() + i * heightStep;
 
                     Location loc = new Location(center.getWorld(), x, y, z);
-                    center.getWorld().spawnParticle(npcData.getParticleType(), loc, 1, 0, 0, 0, npcData.getSpeed());
+                    spawnParticleWithData(loc, npcData);
                 }
 
                 ticks++;
@@ -384,7 +392,7 @@ public class ParticleEffectManager {
                             center.getY() + 1 + y,
                             center.getZ() + z
                     );
-                    center.getWorld().spawnParticle(npcData.getParticleType(), loc, 1, 0, 0, 0, npcData.getSpeed());
+                    spawnParticleWithData(loc, npcData);
                 }
 
                 ticks++;
@@ -403,21 +411,131 @@ public class ParticleEffectManager {
                     return;
                 }
 
-                center.getWorld().spawnParticle(
-                        npcData.getParticleType(),
-                        center,
-                        npcData.getDensity(),
-                        0.1, 0.1, 0.1,
-                        npcData.getSpeed()
-                );
+                // Spawn particles with offsets
+                for (int i = 0; i < npcData.getDensity(); i++) {
+                    double offsetX = (Math.random() - 0.5) * 0.2;
+                    double offsetY = (Math.random() - 0.5) * 0.2;
+                    double offsetZ = (Math.random() - 0.5) * 0.2;
+                    Location loc = center.clone().add(offsetX, offsetY, offsetZ);
+                    spawnParticleWithData(loc, npcData);
+                }
 
                 ticks++;
             }
         }.runTaskTimer(plugin, 0L, 1L);
     }
 
+    private void spawnMess(NPCData npcData, Location center) {
+        new BukkitRunnable() {
+            int ticks = 0;
+
+            @Override
+            public void run() {
+                if (ticks >= npcData.getDuration()) {
+                    cancel();
+                    return;
+                }
+
+                int particleCount = npcData.getDensity();
+                double radius = npcData.getRadius();
+                
+                // Spawn particles at random positions within sphere
+                for (int i = 0; i < particleCount; i++) {
+                    // Random position in sphere
+                    double randomRadius = Math.random() * radius;
+                    double theta = Math.random() * 2 * Math.PI;  // Random angle
+                    double phi = Math.random() * Math.PI;  // Random vertical angle
+                    
+                    double x = center.getX() + randomRadius * Math.sin(phi) * Math.cos(theta);
+                    double y = center.getY() + randomRadius * Math.sin(phi) * Math.sin(theta);
+                    double z = center.getZ() + randomRadius * Math.cos(phi);
+                    
+                    Location loc = new Location(center.getWorld(), x, y, z);
+                    spawnParticleWithData(loc, npcData);
+                }
+
+                ticks++;
+            }
+        }.runTaskTimer(plugin, 0L, 1L);
+    }
+
+    /**
+     * Spawn particle with proper data handling for particles that require BlockData, DustOptions, etc.
+     */
+    private void spawnParticleWithData(Location loc, NPCData npcData) {
+        Particle particle = npcData.getParticleType();
+        
+        // Check if particle requires special data
+        if (particle == Particle.FALLING_DUST || particle == Particle.BLOCK_CRACK || particle == Particle.BLOCK_MARKER) {
+            // Parse block state
+            String blockStateName = npcData.getBlockState();
+            if (blockStateName != null) {
+                blockStateName = blockStateName.replace("minecraft:", "");
+                Material material = Material.matchMaterial(blockStateName.toUpperCase());
+                if (material != null && material.isBlock()) {
+                    BlockData blockData = material.createBlockData();
+                    loc.getWorld().spawnParticle(particle, loc, 1, 0, 0, 0, 0, blockData);
+                    return;
+                }
+            }
+        } else if (particle == Particle.DUST) {
+            // Handle DUST particles with color
+            int[] rgb = npcData.getDustColor();
+            float size = npcData.getDustSize();
+            if (rgb != null && rgb.length == 3) {
+                Particle.DustOptions dustOptions = new Particle.DustOptions(
+                    org.bukkit.Color.fromRGB(rgb[0], rgb[1], rgb[2]), size
+                );
+                loc.getWorld().spawnParticle(Particle.DUST, loc, 1, 0, 0, 0, 0, dustOptions);
+                return;
+            }
+        } else if (particle == Particle.DUST_COLOR_TRANSITION) {
+            // Handle color transition
+            Map<String, Object> data = npcData.getParticleData();
+            if (data != null && data.containsKey("from-color") && data.containsKey("to-color")) {
+                @SuppressWarnings("unchecked")
+                Map<String, Object> fromColorMap = (Map<String, Object>) data.get("from-color");
+                @SuppressWarnings("unchecked")
+                Map<String, Object> toColorMap = (Map<String, Object>) data.get("to-color");
+                
+                int fromR = ((Number) fromColorMap.get("r")).intValue();
+                int fromG = ((Number) fromColorMap.get("g")).intValue();
+                int fromB = ((Number) fromColorMap.get("b")).intValue();
+                
+                int toR = ((Number) toColorMap.get("r")).intValue();
+                int toG = ((Number) toColorMap.get("g")).intValue();
+                int toB = ((Number) toColorMap.get("b")).intValue();
+                
+                float size = data.containsKey("size") ? ((Number) data.get("size")).floatValue() : 1.0f;
+                
+                Particle.DustTransition dustTransition = new Particle.DustTransition(
+                    org.bukkit.Color.fromRGB(fromR, fromG, fromB),
+                    org.bukkit.Color.fromRGB(toR, toG, toB),
+                    size
+                );
+                loc.getWorld().spawnParticle(Particle.DUST_COLOR_TRANSITION, loc, 1, 0, 0, 0, 0, dustTransition);
+                return;
+            }
+        } else if (particle == Particle.ITEM_CRACK) {
+            // Handle item crack
+            String itemName = npcData.getBlockState();
+            if (itemName != null) {
+                itemName = itemName.replace("minecraft:", "");
+                Material material = Material.matchMaterial(itemName.toUpperCase());
+                if (material != null && material.isItem()) {
+                    ItemStack itemStack = new ItemStack(material);
+                    loc.getWorld().spawnParticle(Particle.ITEM_CRACK, loc, 1, 0, 0, 0, 0, itemStack);
+                    return;
+                }
+            }
+        }
+        
+        // Default spawning for regular particles
+        loc.getWorld().spawnParticle(particle, loc, 1, 0, 0, 0, npcData.getSpeed());
+    }
+
     private void spawnParticleAt(Location center, double offsetX, double offsetY, double offsetZ, NPCData npcData) {
         Location loc = center.clone().add(offsetX, offsetY, offsetZ);
-        center.getWorld().spawnParticle(npcData.getParticleType(), loc, 1, 0, 0, 0, npcData.getSpeed());
+        spawnParticleWithData(loc, npcData);
     }
 }

@@ -3,6 +3,7 @@ package me.jack.dynamicNPCInteractionParticleEmissionMechanism.models;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 
+import java.util.Map;
 import java.util.UUID;
 
 public class NPCData {
@@ -18,10 +19,15 @@ public class NPCData {
     private final double height;
     private final int rotations;
     private final double animationSpeed;
+    private final String blockState;
+    private final int[] dustColor;
+    private final float dustSize;
+    private final Map<String, Object> particleData;
 
     public NPCData(UUID npcUuid, Location location, Particle particleType, ParticleShape shape,
                    TargetMode targetMode, int density, double speed, int duration, double radius,
-                   double height, int rotations, double animationSpeed) {
+                   double height, int rotations, double animationSpeed, String blockState,
+                   int[] dustColor, float dustSize, Map<String, Object> particleData) {
         this.npcUuid = npcUuid;
         this.location = location;
         this.particleType = particleType;
@@ -34,6 +40,10 @@ public class NPCData {
         this.height = height;
         this.rotations = rotations;
         this.animationSpeed = animationSpeed;
+        this.blockState = blockState;
+        this.dustColor = dustColor;
+        this.dustSize = dustSize;
+        this.particleData = particleData;
     }
 
     public UUID getNpcUuid() {
@@ -82,5 +92,21 @@ public class NPCData {
 
     public double getAnimationSpeed() {
         return animationSpeed;
+    }
+
+    public String getBlockState() {
+        return blockState;
+    }
+
+    public int[] getDustColor() {
+        return dustColor;
+    }
+
+    public float getDustSize() {
+        return dustSize;
+    }
+
+    public Map<String, Object> getParticleData() {
+        return particleData;
     }
 }
