@@ -1,0 +1,5 @@
+name: DynamicNPCInteractionParticleEmissionMechanism
+version: '1.0'
+main: me.jack.dynamicNPCInteractionParticleEmissionMechanism.DynamicNPCInteractionParticleEmissionMechanism
+api-version: '1.21'
+authors: [ Jack(Meedo) ]
