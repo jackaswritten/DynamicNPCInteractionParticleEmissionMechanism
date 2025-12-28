@@ -377,15 +377,15 @@ public class ParticleEffectManager {
 
                 int particles = npcData.getDensity();
                 double progress = (double) ticks / npcData.getDuration();
-                double radius = npcData.getRadius();
+                double expandingRadius = npcData.getRadius() * progress;
 
                 for (int i = 0; i < particles; i++) {
                     double theta = 2 * Math.PI * Math.random();
                     double phi = Math.acos(2 * Math.random() - 1);
 
-                    double x = radius * progress * Math.sin(phi) * Math.cos(theta);
-                    double y = radius * progress * Math.sin(phi) * Math.sin(theta);
-                    double z = radius * progress * Math.cos(phi);
+                    double x = expandingRadius * Math.sin(phi) * Math.cos(theta);
+                    double y = expandingRadius * Math.sin(phi) * Math.sin(theta);
+                    double z = expandingRadius * Math.cos(phi);
                     
                     // Scale Y to height range while X and Z use radius
                     double heightScale = npcData.getHeight() / (2 * npcData.getRadius());
