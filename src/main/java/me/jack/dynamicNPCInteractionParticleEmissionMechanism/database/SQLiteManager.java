@@ -307,13 +307,15 @@ public class SQLiteManager extends DatabaseManager {
         if (data == null || data.isEmpty()) {
             return null;
         }
-        // Simple JSON-like serialization
+        // Simple JSON serialization (not currently deserialized, but kept for future use)
         StringBuilder sb = new StringBuilder("{");
         for (Map.Entry<String, Object> entry : data.entrySet()) {
             if (sb.length() > 1) sb.append(",");
             sb.append("\"").append(entry.getKey()).append("\":");
             if (entry.getValue() instanceof Map) {
                 sb.append(serializeMap((Map<?, ?>) entry.getValue()));
+            } else if (entry.getValue() instanceof String) {
+                sb.append("\"").append(entry.getValue()).append("\"");
             } else {
                 sb.append(entry.getValue());
             }
@@ -326,7 +328,12 @@ public class SQLiteManager extends DatabaseManager {
         StringBuilder sb = new StringBuilder("{");
         for (Map.Entry<?, ?> entry : map.entrySet()) {
             if (sb.length() > 1) sb.append(",");
-            sb.append("\"").append(entry.getKey()).append("\":").append(entry.getValue());
+            sb.append("\"").append(entry.getKey()).append("\":");
+            if (entry.getValue() instanceof String) {
+                sb.append("\"").append(entry.getValue()).append("\"");
+            } else {
+                sb.append(entry.getValue());
+            }
         }
         sb.append("}");
         return sb.toString();
