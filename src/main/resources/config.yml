@@ -21,6 +21,37 @@ default-settings:
   height: 2.0
   rotations: 2
   animation-speed: 1.0
+  
+  # Optional particle-data section for particles that require special data
+  # Uncomment and configure based on your particle type:
+  
+  # For FALLING_DUST, BLOCK_CRACK, BLOCK_MARKER particles:
+  # particle-data:
+  #   block-state: "minecraft:light_blue_wool"
+  
+  # For DUST particles (colored particles):
+  # particle-data:
+  #   color:
+  #     r: 0
+  #     g: 191
+  #     b: 255
+  #   size: 1.5
+  
+  # For DUST_COLOR_TRANSITION particles:
+  # particle-data:
+  #   from-color:
+  #     r: 255
+  #     g: 0
+  #     b: 0
+  #   to-color:
+  #     r: 0
+  #     g: 0
+  #     b: 255
+  #   size: 1.5
+  
+  # For ITEM_CRACK particles:
+  # particle-data:
+  #   block-state: "minecraft:diamond"  # Use item name here
 
 # Messages
 messages:

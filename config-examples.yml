@@ -1,0 +1,124 @@
+# Example configurations for different particle types and the new MESS shape
+
+# Example 1: Falling Dust with Light Blue Wool (MESS shape)
+# This configuration creates a messy cloud of light blue wool particles
+falling-dust-mess-example:
+  particle-type: FALLING_DUST
+  shape: MESS
+  target-mode: FULL_NPC
+  density: 15
+  speed: 0.1
+  duration: 60
+  radius: 0.5
+  height: 2.0
+  rotations: 2
+  animation-speed: 1.0
+  particle-data:
+    block-state: "minecraft:light_blue_wool"
+
+# Example 2: Colored DUST particles in SPHERE shape
+dust-sphere-example:
+  particle-type: DUST
+  shape: SPHERE
+  target-mode: FULL_NPC
+  density: 30
+  speed: 0.1
+  duration: 60
+  radius: 2.0
+  height: 2.0
+  rotations: 2
+  animation-speed: 1.0
+  particle-data:
+    color:
+      r: 0
+      g: 191
+      b: 255
+    size: 1.5
+
+# Example 3: Block Crack particles with CIRCLE shape
+block-crack-circle-example:
+  particle-type: BLOCK_CRACK
+  shape: CIRCLE
+  target-mode: FULL_NPC
+  density: 30
+  speed: 0.1
+  duration: 60
+  radius: 2.0
+  height: 2.0
+  rotations: 2
+  animation-speed: 1.0
+  particle-data:
+    block-state: "minecraft:redstone_block"
+
+# Example 4: Item Crack particles with HEART shape
+item-crack-heart-example:
+  particle-type: ITEM_CRACK
+  shape: HEART
+  target-mode: FULL_NPC
+  density: 30
+  speed: 0.1
+  duration: 60
+  radius: 2.0
+  height: 2.0
+  rotations: 2
+  animation-speed: 1.0
+  particle-data:
+    block-state: "minecraft:diamond"
+
+# Example 5: Color Transition DUST with SPIRAL shape
+dust-transition-spiral-example:
+  particle-type: DUST_COLOR_TRANSITION
+  shape: SPIRAL
+  target-mode: FULL_NPC
+  density: 30
+  speed: 0.1
+  duration: 60
+  radius: 2.0
+  height: 2.0
+  rotations: 2
+  animation-speed: 1.0
+  particle-data:
+    from-color:
+      r: 255
+      g: 0
+      b: 0
+    to-color:
+      r: 0
+      g: 0
+      b: 255
+    size: 1.5
+
+# Example 6: Regular FLAME particles with new MESS shape
+flame-mess-example:
+  particle-type: FLAME
+  shape: MESS
+  target-mode: FULL_NPC
+  density: 20
+  speed: 0.1
+  duration: 60
+  radius: 1.0
+  height: 2.0
+  rotations: 2
+  animation-speed: 1.0
+
+# Example 7: Falling Dust with different block types
+falling-dust-stone-example:
+  particle-type: FALLING_DUST
+  shape: TORNADO
+  target-mode: FULL_NPC
+  density: 30
+  speed: 0.1
+  duration: 60
+  radius: 2.0
+  height: 3.0
+  rotations: 3
+  animation-speed: 1.0
+  particle-data:
+    block-state: "minecraft:stone"
+
+# How to use these examples:
+# 1. Copy the configuration you want to use
+# 2. Paste it into your config.yml file under the "default-settings:" section
+# 3. Remove the example name (e.g., "falling-dust-mess-example:")
+# 4. Save the config and reload with /dnipem reload
+# 5. Add NPCs with /dnipem add while looking at them
