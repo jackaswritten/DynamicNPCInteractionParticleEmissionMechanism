@@ -449,10 +449,12 @@ public class ParticleEffectManager {
                 for (int i = 0; i < particleCount; i++) {
                     // Random position in cylindrical space (circular base)
                     double angle = Math.random() * 2 * Math.PI;
-                    double randomRadius = Math.sqrt(Math.random()) * radius;  // Uniform distribution within circle
+                    // Use square root for uniform distribution within circle area (inverse transform sampling)
+                    double randomRadius = Math.sqrt(Math.random()) * radius;
                     double randomX = randomRadius * Math.cos(angle);
                     double randomZ = randomRadius * Math.sin(angle);
-                    double randomY = Math.random() * height;  // USE HEIGHT RANGE
+                    // Vertical position within height range
+                    double randomY = Math.random() * height;
                     
                     double x = center.getX() + randomX;
                     double y = center.getY() + randomY;  // Starts at center.y, goes UP by height
