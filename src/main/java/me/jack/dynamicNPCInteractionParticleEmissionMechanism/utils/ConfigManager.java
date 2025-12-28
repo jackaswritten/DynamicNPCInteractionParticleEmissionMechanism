@@ -6,6 +6,9 @@ import org.bukkit.Particle;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ConfigManager {
     private final JavaPlugin plugin;
     private FileConfiguration config;
@@ -105,6 +108,54 @@ public class ConfigManager {
 
     public double getDefaultAnimationSpeed() {
         return config.getDouble("default-settings.animation-speed", 1.0);
+    }
+
+    public String getDefaultBlockState() {
+        return config.getString("default-settings.particle-data.block-state", null);
+    }
+
+    public int[] getDefaultDustColor() {
+        if (config.contains("default-settings.particle-data.color")) {
+            int r = config.getInt("default-settings.particle-data.color.r", 255);
+            int g = config.getInt("default-settings.particle-data.color.g", 255);
+            int b = config.getInt("default-settings.particle-data.color.b", 255);
+            return new int[]{r, g, b};
+        }
+        return null;
+    }
+
+    public float getDefaultDustSize() {
+        return (float) config.getDouble("default-settings.particle-data.size", 1.0);
+    }
+
+    public Map<String, Object> getDefaultParticleData() {
+        if (config.contains("default-settings.particle-data")) {
+            Map<String, Object> data = new HashMap<>();
+            
+            // Get the particle-data section
+            if (config.contains("default-settings.particle-data.from-color")) {
+                Map<String, Object> fromColor = new HashMap<>();
+                fromColor.put("r", config.getInt("default-settings.particle-data.from-color.r", 255));
+                fromColor.put("g", config.getInt("default-settings.particle-data.from-color.g", 0));
+                fromColor.put("b", config.getInt("default-settings.particle-data.from-color.b", 0));
+                data.put("from-color", fromColor);
+            }
+            
+            if (config.contains("default-settings.particle-data.to-color")) {
+                Map<String, Object> toColor = new HashMap<>();
+                toColor.put("r", config.getInt("default-settings.particle-data.to-color.r", 0));
+                toColor.put("g", config.getInt("default-settings.particle-data.to-color.g", 0));
+                toColor.put("b", config.getInt("default-settings.particle-data.to-color.b", 255));
+                data.put("to-color", toColor);
+            }
+            
+            if (config.contains("default-settings.particle-data.size")) {
+                data.put("size", config.getDouble("default-settings.particle-data.size", 1.0));
+            }
+            
+            return data.isEmpty() ? null : data;
+        }
+        return null;
     }
 
     public String getMessage(String key) {

@@ -11,5 +11,6 @@ public enum ParticleShape {
     RING,
     TORNADO,
     EXPLOSION,
-    POINT
+    POINT,
+    MESS
 }
