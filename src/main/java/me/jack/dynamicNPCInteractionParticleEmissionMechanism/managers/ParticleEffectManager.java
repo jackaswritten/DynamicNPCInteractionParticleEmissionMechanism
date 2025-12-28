@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -22,53 +23,53 @@ public class ParticleEffectManager {
     /**
      * Spawn a particle effect at the given location based on NPC data
      */
-    public void spawnEffect(NPCData npcData, Location targetLocation) {
+    public void spawnEffect(NPCData npcData, Location targetLocation, Player viewer) {
         ParticleShape shape = npcData.getShape();
 
         switch (shape) {
             case CIRCLE:
-                spawnCircle(npcData, targetLocation);
+                spawnCircle(npcData, targetLocation, viewer);
                 break;
             case BOX:
-                spawnBox(npcData, targetLocation);
+                spawnBox(npcData, targetLocation, viewer);
                 break;
             case SPHERE:
-                spawnSphere(npcData, targetLocation);
+                spawnSphere(npcData, targetLocation, viewer);
                 break;
             case SPIRAL:
-                spawnSpiral(npcData, targetLocation);
+                spawnSpiral(npcData, targetLocation, viewer);
                 break;
             case HELIX:
-                spawnHelix(npcData, targetLocation);
+                spawnHelix(npcData, targetLocation, viewer);
                 break;
             case WAVE:
-                spawnWave(npcData, targetLocation);
+                spawnWave(npcData, targetLocation, viewer);
                 break;
             case HEART:
-                spawnHeart(npcData, targetLocation);
+                spawnHeart(npcData, targetLocation, viewer);
                 break;
             case RING:
-                spawnRing(npcData, targetLocation);
+                spawnRing(npcData, targetLocation, viewer);
                 break;
             case TORNADO:
-                spawnTornado(npcData, targetLocation);
+                spawnTornado(npcData, targetLocation, viewer);
                 break;
             case EXPLOSION:
-                spawnExplosion(npcData, targetLocation);
+                spawnExplosion(npcData, targetLocation, viewer);
                 break;
             case POINT:
-                spawnPoint(npcData, targetLocation);
+                spawnPoint(npcData, targetLocation, viewer);
                 break;
             case MESS:
-                spawnMess(npcData, targetLocation);
+                spawnMess(npcData, targetLocation, viewer);
                 break;
             default:
-                spawnCircle(npcData, targetLocation);
+                spawnCircle(npcData, targetLocation, viewer);
                 break;
         }
     }
 
-    private void spawnCircle(NPCData npcData, Location center) {
+    private void spawnCircle(NPCData npcData, Location center, Player viewer) {
         new BukkitRunnable() {
             int ticks = 0;
 
@@ -86,10 +87,10 @@ public class ParticleEffectManager {
                     double particleAngle = (2 * Math.PI * i / particles) + angle;
                     double x = center.getX() + npcData.getRadius() * Math.cos(particleAngle);
                     double z = center.getZ() + npcData.getRadius() * Math.sin(particleAngle);
-                    double y = center.getY() + 1;
+                    double y = center.getY() + npcData.getHeight() / 2;
 
                     Location loc = new Location(center.getWorld(), x, y, z);
-                    spawnParticleWithData(loc, npcData);
+                    spawnParticleWithData(loc, npcData, viewer);
                 }
 
                 ticks++;
@@ -97,7 +98,7 @@ public class ParticleEffectManager {
         }.runTaskTimer(plugin, 0L, 1L);
     }
 
-    private void spawnBox(NPCData npcData, Location center) {
+    private void spawnBox(NPCData npcData, Location center, Player viewer) {
         new BukkitRunnable() {
             int ticks = 0;
 
@@ -116,22 +117,22 @@ public class ParticleEffectManager {
                     double t = (double) i / particlesPerEdge;
 
                     // Bottom square
-                    spawnParticleAt(center, -size + 2 * size * t, 0, -size, npcData);
-                    spawnParticleAt(center, -size + 2 * size * t, 0, size, npcData);
-                    spawnParticleAt(center, -size, 0, -size + 2 * size * t, npcData);
-                    spawnParticleAt(center, size, 0, -size + 2 * size * t, npcData);
+                    spawnParticleAt(center, -size + 2 * size * t, 0, -size, npcData, viewer);
+                    spawnParticleAt(center, -size + 2 * size * t, 0, size, npcData, viewer);
+                    spawnParticleAt(center, -size, 0, -size + 2 * size * t, npcData, viewer);
+                    spawnParticleAt(center, size, 0, -size + 2 * size * t, npcData, viewer);
 
                     // Top square
-                    spawnParticleAt(center, -size + 2 * size * t, npcData.getHeight(), -size, npcData);
-                    spawnParticleAt(center, -size + 2 * size * t, npcData.getHeight(), size, npcData);
-                    spawnParticleAt(center, -size, npcData.getHeight(), -size + 2 * size * t, npcData);
-                    spawnParticleAt(center, size, npcData.getHeight(), -size + 2 * size * t, npcData);
+                    spawnParticleAt(center, -size + 2 * size * t, npcData.getHeight(), -size, npcData, viewer);
+                    spawnParticleAt(center, -size + 2 * size * t, npcData.getHeight(), size, npcData, viewer);
+                    spawnParticleAt(center, -size, npcData.getHeight(), -size + 2 * size * t, npcData, viewer);
+                    spawnParticleAt(center, size, npcData.getHeight(), -size + 2 * size * t, npcData, viewer);
 
                     // Vertical edges
-                    spawnParticleAt(center, -size, npcData.getHeight() * t, -size, npcData);
-                    spawnParticleAt(center, -size, npcData.getHeight() * t, size, npcData);
-                    spawnParticleAt(center, size, npcData.getHeight() * t, -size, npcData);
-                    spawnParticleAt(center, size, npcData.getHeight() * t, size, npcData);
+                    spawnParticleAt(center, -size, npcData.getHeight() * t, -size, npcData, viewer);
+                    spawnParticleAt(center, -size, npcData.getHeight() * t, size, npcData, viewer);
+                    spawnParticleAt(center, size, npcData.getHeight() * t, -size, npcData, viewer);
+                    spawnParticleAt(center, size, npcData.getHeight() * t, size, npcData, viewer);
                 }
 
                 ticks++;
@@ -139,7 +140,7 @@ public class ParticleEffectManager {
         }.runTaskTimer(plugin, 0L, 1L);
     }
 
-    private void spawnSphere(NPCData npcData, Location center) {
+    private void spawnSphere(NPCData npcData, Location center, Player viewer) {
         new BukkitRunnable() {
             int ticks = 0;
 
@@ -164,10 +165,10 @@ public class ParticleEffectManager {
                     Location loc = new Location(
                             center.getWorld(),
                             center.getX() + x * npcData.getRadius(),
-                            center.getY() + 1 + y * npcData.getRadius(),
+                            center.getY() + npcData.getHeight() / 2 + y * npcData.getHeight() / 2,
                             center.getZ() + z * npcData.getRadius()
                     );
-                    spawnParticleWithData(loc, npcData);
+                    spawnParticleWithData(loc, npcData, viewer);
                 }
 
                 ticks++;
@@ -175,7 +176,7 @@ public class ParticleEffectManager {
         }.runTaskTimer(plugin, 0L, 1L);
     }
 
-    private void spawnSpiral(NPCData npcData, Location center) {
+    private void spawnSpiral(NPCData npcData, Location center, Player viewer) {
         new BukkitRunnable() {
             int ticks = 0;
 
@@ -197,7 +198,7 @@ public class ParticleEffectManager {
                     double y = center.getY() + i * heightStep;
 
                     Location loc = new Location(center.getWorld(), x, y, z);
-                    spawnParticleWithData(loc, npcData);
+                    spawnParticleWithData(loc, npcData, viewer);
                 }
 
                 ticks++;
@@ -205,7 +206,7 @@ public class ParticleEffectManager {
         }.runTaskTimer(plugin, 0L, 1L);
     }
 
-    private void spawnHelix(NPCData npcData, Location center) {
+    private void spawnHelix(NPCData npcData, Location center, Player viewer) {
         new BukkitRunnable() {
             int ticks = 0;
 
@@ -227,13 +228,13 @@ public class ParticleEffectManager {
                     double x1 = center.getX() + npcData.getRadius() * Math.cos(angle);
                     double z1 = center.getZ() + npcData.getRadius() * Math.sin(angle);
                     Location loc1 = new Location(center.getWorld(), x1, y, z1);
-                    spawnParticleWithData(loc1, npcData);
+                    spawnParticleWithData(loc1, npcData, viewer);
 
                     // Second helix (offset by 180 degrees)
                     double x2 = center.getX() + npcData.getRadius() * Math.cos(angle + Math.PI);
                     double z2 = center.getZ() + npcData.getRadius() * Math.sin(angle + Math.PI);
                     Location loc2 = new Location(center.getWorld(), x2, y, z2);
-                    spawnParticleWithData(loc2, npcData);
+                    spawnParticleWithData(loc2, npcData, viewer);
                 }
 
                 ticks++;
@@ -241,7 +242,7 @@ public class ParticleEffectManager {
         }.runTaskTimer(plugin, 0L, 1L);
     }
 
-    private void spawnWave(NPCData npcData, Location center) {
+    private void spawnWave(NPCData npcData, Location center, Player viewer) {
         new BukkitRunnable() {
             int ticks = 0;
 
@@ -258,11 +259,11 @@ public class ParticleEffectManager {
                 for (int i = 0; i < particles; i++) {
                     double x = center.getX() - width / 2 + (width * i / particles);
                     double waveAngle = (ticks * npcData.getAnimationSpeed() + i * npcData.getRotations() * 360.0 / particles) * Math.PI / 180.0;
-                    double y = center.getY() + 1 + Math.sin(waveAngle) * npcData.getHeight() / 2;
+                    double y = center.getY() + npcData.getHeight() / 2 + Math.sin(waveAngle) * npcData.getHeight() / 2;
                     double z = center.getZ();
 
                     Location loc = new Location(center.getWorld(), x, y, z);
-                    spawnParticleWithData(loc, npcData);
+                    spawnParticleWithData(loc, npcData, viewer);
                 }
 
                 ticks++;
@@ -270,7 +271,7 @@ public class ParticleEffectManager {
         }.runTaskTimer(plugin, 0L, 1L);
     }
 
-    private void spawnHeart(NPCData npcData, Location center) {
+    private void spawnHeart(NPCData npcData, Location center, Player viewer) {
         new BukkitRunnable() {
             int ticks = 0;
 
@@ -294,10 +295,10 @@ public class ParticleEffectManager {
                     Location loc = new Location(
                             center.getWorld(),
                             center.getX() + x * scale,
-                            center.getY() + 1 + y * scale,
+                            center.getY() + npcData.getHeight() / 2 + y * scale,
                             center.getZ()
                     );
-                    spawnParticleWithData(loc, npcData);
+                    spawnParticleWithData(loc, npcData, viewer);
                 }
 
                 ticks++;
@@ -305,7 +306,7 @@ public class ParticleEffectManager {
         }.runTaskTimer(plugin, 0L, 1L);
     }
 
-    private void spawnRing(NPCData npcData, Location center) {
+    private void spawnRing(NPCData npcData, Location center, Player viewer) {
         new BukkitRunnable() {
             int ticks = 0;
 
@@ -325,7 +326,7 @@ public class ParticleEffectManager {
                     double z = center.getZ() + npcData.getRadius() * Math.sin(angle);
 
                     Location loc = new Location(center.getWorld(), x, y, z);
-                    spawnParticleWithData(loc, npcData);
+                    spawnParticleWithData(loc, npcData, viewer);
                 }
 
                 ticks++;
@@ -333,7 +334,7 @@ public class ParticleEffectManager {
         }.runTaskTimer(plugin, 0L, 1L);
     }
 
-    private void spawnTornado(NPCData npcData, Location center) {
+    private void spawnTornado(NPCData npcData, Location center, Player viewer) {
         new BukkitRunnable() {
             int ticks = 0;
 
@@ -355,7 +356,7 @@ public class ParticleEffectManager {
                     double y = center.getY() + i * heightStep;
 
                     Location loc = new Location(center.getWorld(), x, y, z);
-                    spawnParticleWithData(loc, npcData);
+                    spawnParticleWithData(loc, npcData, viewer);
                 }
 
                 ticks++;
@@ -363,7 +364,7 @@ public class ParticleEffectManager {
         }.runTaskTimer(plugin, 0L, 1L);
     }
 
-    private void spawnExplosion(NPCData npcData, Location center) {
+    private void spawnExplosion(NPCData npcData, Location center, Player viewer) {
         new BukkitRunnable() {
             int ticks = 0;
 
@@ -389,10 +390,10 @@ public class ParticleEffectManager {
                     Location loc = new Location(
                             center.getWorld(),
                             center.getX() + x,
-                            center.getY() + 1 + y,
+                            center.getY() + npcData.getHeight() / 2 + y * npcData.getHeight() / (2 * npcData.getRadius()),
                             center.getZ() + z
                     );
-                    spawnParticleWithData(loc, npcData);
+                    spawnParticleWithData(loc, npcData, viewer);
                 }
 
                 ticks++;
@@ -400,7 +401,7 @@ public class ParticleEffectManager {
         }.runTaskTimer(plugin, 0L, 1L);
     }
 
-    private void spawnPoint(NPCData npcData, Location center) {
+    private void spawnPoint(NPCData npcData, Location center, Player viewer) {
         new BukkitRunnable() {
             int ticks = 0;
 
@@ -416,8 +417,8 @@ public class ParticleEffectManager {
                     double offsetX = (Math.random() - 0.5) * 0.2;
                     double offsetY = (Math.random() - 0.5) * 0.2;
                     double offsetZ = (Math.random() - 0.5) * 0.2;
-                    Location loc = center.clone().add(offsetX, offsetY, offsetZ);
-                    spawnParticleWithData(loc, npcData);
+                    Location loc = center.clone().add(offsetX, npcData.getHeight() / 2 + offsetY, offsetZ);
+                    spawnParticleWithData(loc, npcData, viewer);
                 }
 
                 ticks++;
@@ -425,7 +426,7 @@ public class ParticleEffectManager {
         }.runTaskTimer(plugin, 0L, 1L);
     }
 
-    private void spawnMess(NPCData npcData, Location center) {
+    private void spawnMess(NPCData npcData, Location center, Player viewer) {
         new BukkitRunnable() {
             int ticks = 0;
 
@@ -438,21 +439,21 @@ public class ParticleEffectManager {
 
                 int particleCount = npcData.getDensity();
                 double radius = npcData.getRadius();
+                double height = npcData.getHeight();
                 
-                // Spawn particles at random positions within sphere
+                // Spawn particles at random positions within cylinder
                 for (int i = 0; i < particleCount; i++) {
-                    // Random position in sphere using spherical coordinates
-                    double randomRadius = Math.random() * radius;
-                    double theta = Math.random() * 2 * Math.PI;  // Random azimuthal angle
-                    double phi = Math.random() * Math.PI;  // Random polar angle
+                    // Random position in 3D space
+                    double randomX = (Math.random() - 0.5) * 2 * radius;
+                    double randomY = Math.random() * height;  // USE HEIGHT RANGE
+                    double randomZ = (Math.random() - 0.5) * 2 * radius;
                     
-                    // Convert spherical to cartesian coordinates
-                    double x = center.getX() + randomRadius * Math.sin(phi) * Math.cos(theta);
-                    double y = center.getY() + randomRadius * Math.cos(phi);
-                    double z = center.getZ() + randomRadius * Math.sin(phi) * Math.sin(theta);
+                    double x = center.getX() + randomX;
+                    double y = center.getY() + randomY;  // Starts at center.y, goes UP by height
+                    double z = center.getZ() + randomZ;
                     
                     Location loc = new Location(center.getWorld(), x, y, z);
-                    spawnParticleWithData(loc, npcData);
+                    spawnParticleWithData(loc, npcData, viewer);
                 }
 
                 ticks++;
@@ -463,7 +464,7 @@ public class ParticleEffectManager {
     /**
      * Spawn particle with proper data handling for particles that require BlockData, DustOptions, etc.
      */
-    private void spawnParticleWithData(Location loc, NPCData npcData) {
+    private void spawnParticleWithData(Location loc, NPCData npcData, Player viewer) {
         Particle particle = npcData.getParticleType();
         
         // Check if particle requires special data
@@ -475,7 +476,7 @@ public class ParticleEffectManager {
                 Material material = Material.matchMaterial(blockStateName.toUpperCase());
                 if (material != null && material.isBlock()) {
                     BlockData blockData = material.createBlockData();
-                    loc.getWorld().spawnParticle(particle, loc, 1, 0, 0, 0, 0, blockData);
+                    viewer.spawnParticle(particle, loc, 1, 0, 0, 0, 0, blockData);
                     return;
                 }
             }
@@ -487,7 +488,7 @@ public class ParticleEffectManager {
                 Particle.DustOptions dustOptions = new Particle.DustOptions(
                     org.bukkit.Color.fromRGB(rgb[0], rgb[1], rgb[2]), size
                 );
-                loc.getWorld().spawnParticle(Particle.DUST, loc, 1, 0, 0, 0, 0, dustOptions);
+                viewer.spawnParticle(Particle.DUST, loc, 1, 0, 0, 0, 0, dustOptions);
                 return;
             }
         } else if (particle == Particle.DUST_COLOR_TRANSITION) {
@@ -514,7 +515,7 @@ public class ParticleEffectManager {
                     org.bukkit.Color.fromRGB(toR, toG, toB),
                     size
                 );
-                loc.getWorld().spawnParticle(Particle.DUST_COLOR_TRANSITION, loc, 1, 0, 0, 0, 0, dustTransition);
+                viewer.spawnParticle(Particle.DUST_COLOR_TRANSITION, loc, 1, 0, 0, 0, 0, dustTransition);
                 return;
             }
         } else if (particle == Particle.ITEM_CRACK) {
@@ -525,18 +526,18 @@ public class ParticleEffectManager {
                 Material material = Material.matchMaterial(itemName.toUpperCase());
                 if (material != null && material.isItem()) {
                     ItemStack itemStack = new ItemStack(material);
-                    loc.getWorld().spawnParticle(Particle.ITEM_CRACK, loc, 1, 0, 0, 0, 0, itemStack);
+                    viewer.spawnParticle(Particle.ITEM_CRACK, loc, 1, 0, 0, 0, 0, itemStack);
                     return;
                 }
             }
         }
         
         // Default spawning for regular particles
-        loc.getWorld().spawnParticle(particle, loc, 1, 0, 0, 0, npcData.getSpeed());
+        viewer.spawnParticle(particle, loc, 1, 0, 0, 0, npcData.getSpeed());
     }
 
-    private void spawnParticleAt(Location center, double offsetX, double offsetY, double offsetZ, NPCData npcData) {
+    private void spawnParticleAt(Location center, double offsetX, double offsetY, double offsetZ, NPCData npcData, Player viewer) {
         Location loc = center.clone().add(offsetX, offsetY, offsetZ);
-        spawnParticleWithData(loc, npcData);
+        spawnParticleWithData(loc, npcData, viewer);
     }
 }

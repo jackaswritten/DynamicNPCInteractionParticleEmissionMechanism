@@ -45,7 +45,7 @@ public class NPCClickListener implements Listener {
             targetLocation = clickedEntity.getLocation();
         }
 
-        // Spawn the particle effect
-        particleEffectManager.spawnEffect(npcData, targetLocation);
+        // Spawn the particle effect - pass the player
+        particleEffectManager.spawnEffect(npcData, targetLocation, player);
     }
 }
