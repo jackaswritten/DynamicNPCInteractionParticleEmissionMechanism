@@ -441,14 +441,15 @@ public class ParticleEffectManager {
                 
                 // Spawn particles at random positions within sphere
                 for (int i = 0; i < particleCount; i++) {
-                    // Random position in sphere
+                    // Random position in sphere using spherical coordinates
                     double randomRadius = Math.random() * radius;
-                    double theta = Math.random() * 2 * Math.PI;  // Random angle
-                    double phi = Math.random() * Math.PI;  // Random vertical angle
+                    double theta = Math.random() * 2 * Math.PI;  // Random azimuthal angle
+                    double phi = Math.random() * Math.PI;  // Random polar angle
                     
+                    // Convert spherical to cartesian coordinates
                     double x = center.getX() + randomRadius * Math.sin(phi) * Math.cos(theta);
-                    double y = center.getY() + randomRadius * Math.sin(phi) * Math.sin(theta);
-                    double z = center.getZ() + randomRadius * Math.cos(phi);
+                    double y = center.getY() + randomRadius * Math.cos(phi);
+                    double z = center.getZ() + randomRadius * Math.sin(phi) * Math.sin(theta);
                     
                     Location loc = new Location(center.getWorld(), x, y, z);
                     spawnParticleWithData(loc, npcData);

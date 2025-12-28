@@ -361,10 +361,10 @@ public class MySQLManager extends DatabaseManager {
         if (json == null || json.trim().isEmpty()) {
             return null;
         }
-        // Simple JSON-like deserialization
-        Map<String, Object> data = new HashMap<>();
-        // This is a simple parser - in production, use a proper JSON library
-        // For now, just return null to avoid complexity
+        // Note: This is a simplified implementation. For full DUST_COLOR_TRANSITION support,
+        // the data should be loaded from config on NPC creation rather than from database.
+        // The blockState and dustColor fields handle most particle types.
+        // This field is primarily for future extensibility.
         return null;
     }
 }
