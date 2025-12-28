@@ -377,20 +377,24 @@ public class ParticleEffectManager {
 
                 int particles = npcData.getDensity();
                 double progress = (double) ticks / npcData.getDuration();
-                double radius = npcData.getRadius() * progress;
+                double radius = npcData.getRadius();
 
                 for (int i = 0; i < particles; i++) {
                     double theta = 2 * Math.PI * Math.random();
                     double phi = Math.acos(2 * Math.random() - 1);
 
-                    double x = radius * Math.sin(phi) * Math.cos(theta);
-                    double y = radius * Math.sin(phi) * Math.sin(theta);
-                    double z = radius * Math.cos(phi);
+                    double x = radius * progress * Math.sin(phi) * Math.cos(theta);
+                    double y = radius * progress * Math.sin(phi) * Math.sin(theta);
+                    double z = radius * progress * Math.cos(phi);
+                    
+                    // Scale Y to height range while X and Z use radius
+                    double heightScale = npcData.getHeight() / (2 * npcData.getRadius());
+                    double yOffset = npcData.getHeight() / 2 + y * heightScale;
 
                     Location loc = new Location(
                             center.getWorld(),
                             center.getX() + x,
-                            center.getY() + npcData.getHeight() / 2 + y * npcData.getHeight() / (2 * npcData.getRadius()),
+                            center.getY() + yOffset,
                             center.getZ() + z
                     );
                     spawnParticleWithData(loc, npcData, viewer);
@@ -443,10 +447,12 @@ public class ParticleEffectManager {
                 
                 // Spawn particles at random positions within cylinder
                 for (int i = 0; i < particleCount; i++) {
-                    // Random position in 3D space
-                    double randomX = (Math.random() - 0.5) * 2 * radius;
+                    // Random position in cylindrical space (circular base)
+                    double angle = Math.random() * 2 * Math.PI;
+                    double randomRadius = Math.sqrt(Math.random()) * radius;  // Uniform distribution within circle
+                    double randomX = randomRadius * Math.cos(angle);
+                    double randomZ = randomRadius * Math.sin(angle);
                     double randomY = Math.random() * height;  // USE HEIGHT RANGE
-                    double randomZ = (Math.random() - 0.5) * 2 * radius;
                     
                     double x = center.getX() + randomX;
                     double y = center.getY() + randomY;  // Starts at center.y, goes UP by height
