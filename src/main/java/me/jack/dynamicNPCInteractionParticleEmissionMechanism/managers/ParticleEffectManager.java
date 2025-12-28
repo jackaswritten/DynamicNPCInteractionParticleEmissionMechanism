@@ -393,6 +393,10 @@ public class ParticleEffectManager {
                     double z = expandingRadius * Math.cos(phi);
                     
                     // Scale Y to height range while X and Z use radius
+                    // heightScale = height / (2 * radius) because:
+                    // - Sphere Y ranges from -radius to +radius (diameter = 2 * radius)
+                    // - We want to map this to height range
+                    // - So we scale by height / (2 * radius) to transform sphere diameter to height
                     // When radius is 0, keep Y scaling at 1.0 (vertical line effect)
                     double heightScale = npcData.getRadius() > 0 
                         ? npcData.getHeight() / (2 * npcData.getRadius())
